@@ -70,3 +70,25 @@ func TestDoublyLinkList_PopFront(t *testing.T) {
 	get := dl.Slice()
 	assert.Equal(t, want, get)
 }
+
+func TestIterator_Value(t *testing.T) {
+	dl := New[int]()
+	cases := []int{1, 2, 3, 4, 5, 6, 7, 8}
+	want := []int{4, 3, 2, 1}
+
+	for _, v := range cases {
+		dl.PushFront(v)
+	}
+	for i := 0; i < 4; i++ {
+		dl.PopFront()
+	}
+
+	assert.Equal(t, len(want), dl.Size())
+
+	var get []int
+	for iter := dl.Begin(); iter != dl.End(); iter = iter.Next() {
+		get = append(get, iter.Value())
+	}
+
+	assert.Equal(t, want, get)
+}

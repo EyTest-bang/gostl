@@ -106,17 +106,22 @@ func (dl *DoublyLinkedList[T]) Front() (value T) {
 	return dl.head.next.val
 }
 
-func (dl *DoublyLinkedList[T]) Slice() []T {
-	var (
-		array []T
-		i     int
-	)
+// RemoveNode can remove the node in O(1)
+// But make sure that the node belongs to doubly linked list.
+func (dl *DoublyLinkedList[T]) RemoveNode(node *Node[T]) bool {
+	if dl.Empty() {
+		return false
+	}
+	node.prev.next = node.next
+	node.next.prev = node.prev
+	dl.size--
+	return true
+}
 
-	i = 0
-	array = make([]T, dl.size)
-	for iter := dl.Begin(); iter != dl.End(); iter = iter.Next() {
+func (dl *DoublyLinkedList[T]) Slice() []T {
+	array := make([]T, dl.size)
+	for i, iter := 0, dl.Begin(); iter != dl.End(); i, iter = i+1, iter.Next() {
 		array[i] = iter.node.val
-		i++
 	}
 	return array
 }
@@ -135,14 +140,6 @@ func (iter *Iterator[T]) Next() Iterator[T] {
 	return Iterator[T]{node: iter.node.next}
 }
 
-// RemoveNode can remove the node in O(1)
-// But make sure that the node belongs to doubly linked list.
-func (dl *DoublyLinkedList[T]) RemoveNode(node *Node[T]) bool {
-	if dl.Empty() {
-		return false
-	}
-	node.prev.next = node.next
-	node.next.prev = node.prev
-	dl.size--
-	return true
+func (iter *Iterator[T]) Value() T {
+	return iter.node.val
 }

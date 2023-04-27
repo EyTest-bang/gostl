@@ -187,3 +187,7 @@ func (sl *SkipList[T]) End() Iterator[T] {
 func (iter *Iterator[T]) Next() Iterator[T] {
 	return Iterator[T]{node: iter.node.level[0].forward}
 }
+
+func (iter *Iterator[T]) Value() T {
+	return iter.node.element
+}
